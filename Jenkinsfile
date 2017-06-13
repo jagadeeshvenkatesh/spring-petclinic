@@ -26,7 +26,7 @@ pipeline {
     //        }
     //    }
         stage('Deploy to bluemix') {
-
+            agent any
             steps{
                 step(
                    [$class: 'com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher',
