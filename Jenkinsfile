@@ -56,6 +56,6 @@ pipeline {
     //         steps {
     //             sh 'ruby petclinic_spec.rb'
     //         }
-        }
+        // }
     }
 }
