@@ -15,17 +15,40 @@ pipeline {
                }
            }
        }
-    //    stage('Deploy to Tomcat') {
-    //        agent {
-    //            docker {
-    //                image 'alpine'
-    //            }
-    //        }
-    //        steps {
-    //            sh 'cp target/petclinic.war /usr/share/jenkins/ref/tomcat/petclinic.war'
-    //        }
-    //    }
-        stage('Deploy to bluemix') {
+       stage('Sonar') {
+           agent  {
+               docker {
+                   image 'sebp/sonar-runner'
+                   args '--network=demodeploymentpipeline_default'
+               }
+           }
+           steps {
+               sh '/opt/sonar-runner-2.4/bin/sonar-runner'
+           }
+       }
+        stage('Selenium') {
+            agent {
+                docker {
+                    image 'liatrio/selenium-firefox'
+                    args '--network=demodeploymentpipeline_default'
+                }
+            }
+            steps {
+                sh 'ruby petclinic_spec.rb'
+            }
+        }
+       stage('Deploy to Tomcat') {
+           agent {
+               docker {
+                   image 'alpine'
+               }
+           }
+           steps {
+               sh 'cp target/petclinic.war /usr/share/jenkins/ref/tomcat/petclinic.war'
+               input 'Should be accessible at http://localhost:18888/petclinic/'
+           }
+       }
+       stage('Deploy to bluemix') {
             agent {
                     docker {
                         image 'liatrio/cf-cli'
@@ -39,27 +62,5 @@ pipeline {
                 }
             }
         }
-    //    stage('Sonar') {
-    //        agent  {
-    //            docker {
-    //                image 'sebp/sonar-runner'
-    //                args '--network=demodeploymentpipeline_default'
-    //            }
-    //        }
-    //        steps {
-    //            sh '/opt/sonar-runner-2.4/bin/sonar-runner'
-    //        }
-    //    }
-    //     stage('Selenium') {
-    //         agent {
-    //             docker {
-    //                 image 'liatrio/selenium-firefox'
-    //                 args '--network=demodeploymentpipeline_default'
-    //             }
-    //         }
-    //         steps {
-    //             sh 'ruby petclinic_spec.rb'
-    //         }
-        // }
     }
 }
