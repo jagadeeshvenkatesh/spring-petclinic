@@ -28,7 +28,7 @@ pipeline {
         stage('Deploy to bluemix') {
             agent {
                     docker {
-                        image 'smizy/cf-cli'
+                        image 'liatrio/cf-cli'
                     }
             }
             steps {
@@ -38,7 +38,6 @@ pipeline {
                     sh 'cf push'
                 }
             }
-
         }
     //    stage('Sonar') {
     //        agent  {
