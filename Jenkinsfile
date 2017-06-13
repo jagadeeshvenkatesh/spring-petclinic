@@ -26,8 +26,8 @@ pipeline {
     //        }
     //    }
         stage('Deploy to bluemix') {
-            steps(
-                step(
+
+            steps{
                    [$class: 'com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher',
                                    target: 'https://api.ng.bluemix.net',
                                    organization: 'Liatrio',
@@ -35,8 +35,7 @@ pipeline {
                                    credentialsId: 'bluemix',
                                    selfSigned: true,
                                    resetIfExists: true]
-                    )
-                    )
+                }
         }
     //    stage('Sonar') {
     //        agent  {
