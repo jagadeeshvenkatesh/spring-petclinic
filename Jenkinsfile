@@ -25,16 +25,19 @@ pipeline {
     //            sh 'cp target/petclinic.war /usr/share/jenkins/ref/tomcat/petclinic.war'
     //        }
     //    }
-       step(
-           [$class: 'com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher',
-                           target: 'https://api.ng.bluemix.net',
-                           organization: 'Liatrio',
-                           cloudSpace: 'dev',
-                           credentialsId: 'bluemix',
-                           selfSigned: true,
-                           resetIfExists: true]
-            )
-
+        stage('Deploy to bluemix') {
+            steps(
+                step(
+                   [$class: 'com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher',
+                                   target: 'https://api.ng.bluemix.net',
+                                   organization: 'Liatrio',
+                                   cloudSpace: 'dev',
+                                   credentialsId: 'bluemix',
+                                   selfSigned: true,
+                                   resetIfExists: true]
+                    )
+                    )
+        }
     //    stage('Sonar') {
     //        agent  {
     //            docker {
