@@ -26,18 +26,17 @@ pipeline {
     //        }
     //    }
         stage('Deploy to bluemix') {
-            agent any
-            steps{
-                step(
-                   [$class: 'com.hpe.cloudfoundryjenkins.CloudFoundryPushPublisher',
-                                   target: 'https://api.ng.bluemix.net',
-                                   organization: 'Liatrio',
-                                   cloudSpace: 'dev',
-                                   credentialsId: 'bluemix',
-                                   selfSigned: true,
-                                   resetIfExists: true]
-                    )
+            agent {
+                    docker {
+                        image 'smizy/cf-cli'
+                    }
+            }
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'bluemix', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                    echo PASSWORD
                 }
+            }
+
         }
     //    stage('Sonar') {
     //        agent  {
