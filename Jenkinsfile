@@ -37,15 +37,23 @@ pipeline {
                 sh 'ruby petclinic_spec.rb'
             }
         }
-       stage('Deploy to Tomcat') {
+        stage('Build Container') {
+            agent any
+            steps {
+                sh 'docker build -t petclinic-tomcat .'
+            }
+        }
+       stage('Run container') {
            agent {
                docker {
                    image 'alpine'
                }
            }
            steps {
-               sh 'cp target/petclinic.war /usr/share/jenkins/ref/tomcat/petclinic.war'
-               input 'Should be accessible at http://localhost:18888/petclinic/'
+               sh 'docker rm -f petclinic-tomcat || true'
+               sh 'docker run -p 80:8080 -d --network=demodeploymentpipeline_default --name petclinic-tomcat petclinic-tomcat'
+               input 'Should be accessible at http://localhost/petclinic/'
+               sh 'docker stop petclinic-tomcat'
            }
        }
        stage('Deploy to bluemix') {
