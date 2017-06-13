@@ -33,7 +33,7 @@ pipeline {
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'bluemix', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    echo PASSWORD
+                    sh 'cf'
                 }
             }
 
