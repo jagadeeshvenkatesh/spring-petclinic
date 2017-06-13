@@ -33,7 +33,9 @@ pipeline {
             }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'bluemix', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    sh 'cf'
+                    sh 'cf api https://api.ng.bluemix.net'
+                    sh "cf login -u ${env.USERNAME} -p ${env.PASSWORD}"
+                    sh 'cf push'
                 }
             }
 
