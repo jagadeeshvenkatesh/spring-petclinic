@@ -48,8 +48,8 @@ pipeline {
            agent any
            steps {
                sh 'docker rm -f petclinic-tomcat || true'
-               sh 'docker run -p 80:8080 -d --network=demodeploymentpipeline_default --name petclinic-tomcat petclinic-tomcat'
-               input 'Should be accessible at http://localhost/petclinic/'
+               sh 'docker run -p 80:18887 -d --network=demodeploymentpipeline_default --name petclinic-tomcat petclinic-tomcat'
+               input 'Should be accessible at http://localhost:18887/petclinic/'
                sh 'docker stop petclinic-tomcat'
            }
        }
