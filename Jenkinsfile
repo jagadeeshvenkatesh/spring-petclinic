@@ -27,38 +27,38 @@ pipeline {
                sh '/opt/sonar-runner-2.4/bin/sonar-runner'
            }
        }
-        stage('Selenium') {
-            agent {
-                docker {
-                    image 'liatrio/selenium-firefox'
-                    args '--network=demodeploymentpipeline_default'
-                }
-            }
-            steps {
-                sh 'ruby petclinic_spec.rb'
-            }
-        }
-        stage('Build Container') {
-            agent any
-            steps {
-                sh 'docker build -t petclinic-tomcat .'
-            }
-        }
-       stage('Run container') {
-           agent any
-           steps {
-               sh 'docker rm -f petclinic-tomcat || true'
-               sh 'docker run -p 80:18887 -d --network=demodeploymentpipeline_default --name petclinic-tomcat petclinic-tomcat'
-               input 'Should be accessible at http://localhost:18887/petclinic/'
-               sh 'docker stop petclinic-tomcat'
-           }
-       }
-       stage('Deploy to bluemix') {
-            agent {
-                    docker {
-                        image 'liatrio/cf-cli'
-                    }
-            }
+       stage('Build and Run container') {
+              agent any
+              steps {
+                  sh 'docker build -t petclinic-tomcat .'
+                  sh 'docker rm -f petclinic-tomcat || true'
+                  sh 'docker run -p 18887:8080 -d --network=demodeploymentpipeline_default --name petclinic-tomcat petclinic-tomcat'
+              }
+          }
+          stage('Selenium') {
+              agent {
+                  docker {
+                      image 'liatrio/selenium-firefox'
+                      args '--network=demodeploymentpipeline_default'
+                  }
+              }
+              steps {
+                  sh 'ruby petclinic_spec.rb'
+                  input 'Should be accessible at http://localhost:18887/petclinic/'
+              }
+          }
+          stage('Stop container') {
+              agent any
+              steps {
+                  sh 'docker stop petclinic-tomcat'
+              }
+          }
+          stage('Deploy to bluemix') {
+               agent {
+                       docker {
+                           image 'liatrio/cf-cli'
+                       }
+               }
             steps {
                 DeployToBluemix()
             }
