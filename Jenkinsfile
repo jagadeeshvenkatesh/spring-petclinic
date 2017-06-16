@@ -45,11 +45,7 @@ pipeline {
             }
         }
        stage('Run container') {
-           agent {
-               docker {
-                   image 'alpine'
-               }
-           }
+           agent any
            steps {
                sh 'docker rm -f petclinic-tomcat || true'
                sh 'docker run -p 80:8080 -d --network=demodeploymentpipeline_default --name petclinic-tomcat petclinic-tomcat'
