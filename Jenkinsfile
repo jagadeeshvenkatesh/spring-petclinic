@@ -43,7 +43,6 @@ pipeline {
                   }
               }
               steps {
-                  sh 'sleep 30'
                   sh 'ruby petclinic_spec.rb'
                   input 'Should be accessible at http://localhost:18887/petclinic/'
               }
