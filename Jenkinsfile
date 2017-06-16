@@ -1,3 +1,4 @@
+@Library('Bluemix') _
 pipeline {
     agent none
     stages {
@@ -63,11 +64,7 @@ pipeline {
                     }
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'bluemix', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    sh 'cf api https://api.ng.bluemix.net'
-                    sh "cf login -u ${env.USERNAME} -p ${env.PASSWORD}"
-                    sh 'cf push'
-                }
+                DeployToBluemix()
             }
         }
     }
