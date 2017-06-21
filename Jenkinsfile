@@ -63,5 +63,11 @@ pipeline {
                 DeployToBluemix()
             }
         }
+        stage('Add Version to manifest') {
+            agent any
+            steps {
+                build job:"sample-manifest-pipeline"
+            }
+        }
     }
 }
