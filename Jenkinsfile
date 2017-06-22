@@ -65,7 +65,7 @@ pipeline {
         // }
         stage('Add Version to manifest') {
             agent any
-            steps {
+            post {
                 build job:"sample-manifest-pipeline", parameters:[[$class: 'StringParameterValue', name: 'Product', value: "liatrio-spring-petclinic"], [$class: 'StringParameterValue', name: 'Version', value: "some-version"]]
             }
         }
