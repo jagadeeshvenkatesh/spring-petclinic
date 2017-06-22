@@ -63,13 +63,10 @@ pipeline {
         //         DeployToBluemix()
         //     }
         // }
-        stage('Add Version to manifest') {
-            agent any
-            post {
-                success {
-                    build job:"sample-manifest-pipeline", parameters:[[$class: 'StringParameterValue', name: 'Product', value: "liatrio-spring-petclinic"], [$class: 'StringParameterValue', name: 'Version', value: "some-version"]]
-                }
-            }
+    }
+    post {
+        success {
+            build job:"sample-manifest-pipeline", parameters:[[$class: 'StringParameterValue', name: 'Product', value: "liatrio-spring-petclinic"], [$class: 'StringParameterValue', name: 'Version', value: "some-version"]]
         }
     }
 }
