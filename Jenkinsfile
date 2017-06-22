@@ -53,16 +53,16 @@ pipeline {
                   sh 'docker stop petclinic-tomcat'
               }
           }
-          stage('Deploy to bluemix') {
-               agent {
-                       docker {
-                           image 'liatrio/cf-cli'
-                       }
-               }
-            steps {
-                DeployToBluemix()
-            }
-        }
+        //   stage('Deploy to bluemix') {
+        //        agent {
+        //                docker {
+        //                    image 'liatrio/cf-cli'
+        //                }
+        //        }
+        //     steps {
+        //         DeployToBluemix()
+        //     }
+        // }
         stage('Add Version to manifest') {
             agent any
             steps {
