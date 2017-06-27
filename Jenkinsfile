@@ -43,6 +43,7 @@ pipeline {
              }
              steps {
                  sh "curl http://petclinic-tomcat:8080/petclinic/"
+                 sh 'cat petclinic_spec.rb'
                  sh 'ruby petclinic_spec.rb'
                  input 'Should be accessible at http://localhost:18887/petclinic/'
              }
