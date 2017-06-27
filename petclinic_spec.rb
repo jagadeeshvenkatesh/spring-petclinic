@@ -7,10 +7,12 @@ describe 'Petlinic' do
     puts "Is this even working?"
     @headless = Headless.new
     @headless.start
-
+    puts "after headless"
     @driver = Selenium::WebDriver.for :firefox
+    puts "after webdriver"
     @driver.navigate.to 'http://petclinic-tomcat:8080/petclinic/'
     @driver.manage.timeouts.implicit_wait = 10
+    puts "after timeout"
   end
 
   after do
