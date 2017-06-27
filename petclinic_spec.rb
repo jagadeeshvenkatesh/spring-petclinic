@@ -4,6 +4,7 @@ require 'minitest/autorun'
 
 describe 'Petlinic' do
   before do
+    puts "Is this even working?"
     @headless = Headless.new
     @headless.start
 
