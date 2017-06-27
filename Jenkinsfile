@@ -23,12 +23,7 @@ pipeline {
                }
            }
            steps {
-               sh 'echo $SONAR_ACCOUNT_LOGIN'
-               sh 'echo $SONAR_ACCOUNT_PASSWORD'
-               sh 'echo $SONAR_DB_URL'
-               sh 'echo $SONAR_DB_LOGIN'
-               sh 'echo $SONAR_DB_PASSWORD'
-               sh '/opt/sonar-runner-2.4/bin/sonar-runner -D sonar.jdbc.url=${SONAR_DB_URL} -D sonar.jdbc.username=${SONAR_DB_LOGIN} -D sonar.jdbc.password=${SONAR_DB_PASSWORD}'
+               sh '/opt/sonar-runner-2.4/bin/sonar-runner -D sonar.jdbc.url="${SONAR_DB_URL}" -D sonar.jdbc.username="${SONAR_DB_LOGIN}" -D sonar.jdbc.password="${SONAR_DB_PASSWORD}"'
            }
        }
        stage('Build and Run container') {
