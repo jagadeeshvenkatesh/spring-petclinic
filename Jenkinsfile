@@ -37,7 +37,7 @@ pipeline {
          stage('Selenium') {
              agent {
                  docker {
-                     image 'liatrio/selenium-firefox'
+                     image 'liatrio/selenium-firefox:1.0.0'
                      args '--network=${LDOP_NETWORK_NAME}'
                  }
              }
