@@ -7,7 +7,7 @@ describe 'Petlinic' do
     @headless = Headless.new
     @headless.start
 
-    @driver = Selenium::WebDriver.for :firefox
+    @driver = Selenium::WebDriver.for :chrome
     @driver.navigate.to 'http://petclinic-tomcat:8080/petclinic/'
   end
 
