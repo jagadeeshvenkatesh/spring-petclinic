@@ -17,6 +17,7 @@ describe 'Petlinic' do
   end
 
   describe 'when homepage is available' do
+      @driver.save_screenshot('screenshot.png')
     it 'should show correct page title' do
       assert @driver.title == 'PetClinic :: a Spring Framework demonstration'
     end
