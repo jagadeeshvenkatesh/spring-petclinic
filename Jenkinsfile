@@ -26,25 +26,29 @@ pipeline {
                sh '/opt/sonar-runner-2.4/bin/sonar-runner -e -D sonar.login=${SONAR_ACCOUNT_LOGIN} -D sonar.password=${SONAR_ACCOUNT_PASSWORD} -D sonar.jdbc.url=${SONAR_DB_URL} -D sonar.jdbc.username=${SONAR_DB_LOGIN} -D sonar.jdbc.password=${SONAR_DB_PASSWORD}'
            }
        }
-       stage('Build and Run container') {
+       stage('Build container') {
              agent any
              steps {
                  sh 'docker build -t petclinic-tomcat .'
                  sh 'docker rm -f petclinic-tomcat || true'
+             }
+         }
+         stage('Run Temp Container') {
+             agent any
+             steps {
                  sh 'docker run -p 18887:8080 -d --network=${LDOP_NETWORK_NAME} --name petclinic-tomcat petclinic-tomcat'
              }
          }
-         stage('Selenium') {
+         stage('Smoke-Test') {
              agent {
                  docker {
-                     image 'liatrio/selenium-firefox:1.0.0'
+                     image 'maven:3.5.0'
                      args '--network=${LDOP_NETWORK_NAME}'
                  }
              }
              steps {
-                 sh "curl http://petclinic-tomcat:8080/petclinic/"
-                 sh 'cat petclinic_spec.rb'
-                 sh 'ruby petclinic_spec.rb'
+                 sh "cd regression-suite"
+                 sh "mvn clean -B test -DPETCLINIC_URL=http://petclinic-tomcat:8080/petclinic/"
                  input 'Should be accessible at http://localhost:18887/petclinic/'
              }
          }
