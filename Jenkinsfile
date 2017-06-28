@@ -93,10 +93,11 @@ pipeline {
              steps {
                  sh "cd regression-suite"
                  sh "mvn clean -B test -DPETCLINIC_URL=http://qa-petclinic:8080/petclinic/"
-                 input 'Should be accessible at http://localhost:18889/petclinic/ Go to Prod?'
+                 input 'Deploy to Prod?'
              }
          }
          stage('Deploy to Prod') {
+             agent any
              steps {
                  sh 'docker rm -f prod-petclinic || true'
                  sh 'docker run -p 18890:8080 -d --network=${LDOP_NETWORK_NAME} --name prod-petclinic petclinic-tomcat'
