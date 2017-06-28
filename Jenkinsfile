@@ -39,7 +39,7 @@ pipeline {
                  sh 'docker run -p 18887:8080 -d --network=${LDOP_NETWORK_NAME} --name petclinic-tomcat-temp petclinic-tomcat'
              }
          }
-         stage('Smoke-Test') {
+         stage('Smoke-Test & OWASP Security Scan') {
              agent {
                  docker {
                      image 'maven:3.5.0'
