@@ -32,7 +32,7 @@ pipeline {
                  sh 'docker build -t petclinic-tomcat .'
              }
          }
-         stage('Run Temp Container') {
+         stage('Run local container') {
              agent any
              steps {
                  sh 'docker rm -f petclinic-tomcat-temp || true'
@@ -51,20 +51,20 @@ pipeline {
                  sh "mvn clean -B test -DPETCLINIC_URL=http://petclinic-tomcat:8080/petclinic/"
              }
          }
-         stage('Stop Temp Container') {
+         stage('Stop local container') {
              agent any
              steps {
                  sh 'docker rm -f petclinic-tomcat-temp || true'
              }
          }
-         stage('Deploy to Dev') {
+         stage('Deploy to dev') {
              agent any
              steps {
                  sh 'docker rm -f dev-petclinic || true'
                  sh 'docker run -p 18888:8080 -d --network=${LDOP_NETWORK_NAME} --name dev-petclinic petclinic-tomcat'
              }
          }
-         stage('Smoke Test Dev') {
+         stage('Smoke test dev') {
              agent {
                  docker {
                      image 'maven:3.5.0'
@@ -76,14 +76,14 @@ pipeline {
                  sh "mvn clean -B test -DPETCLINIC_URL=http://dev-petclinic:8080/petclinic/"
              }
          }
-         stage('Deploy to QA') {
+         stage('Deploy to qa') {
              agent any
              steps {
                  sh 'docker rm -f qa-petclinic || true'
                  sh 'docker run -p 18889:8080 -d --network=${LDOP_NETWORK_NAME} --name qa-petclinic petclinic-tomcat'
              }
          }
-         stage('Smoke Test QA') {
+         stage('Smoke test qa') {
              agent {
                  docker {
                      image 'maven:3.5.0'
@@ -96,14 +96,14 @@ pipeline {
                  input 'Deploy to Prod?'
              }
          }
-         stage('Deploy to Prod') {
+         stage('Deploy to prod') {
              agent any
              steps {
                  sh 'docker rm -f prod-petclinic || true'
                  sh 'docker run -p 18890:8080 -d --network=${LDOP_NETWORK_NAME} --name prod-petclinic petclinic-tomcat'
              }
          }
-         stage('Smoke Test Prod') {
+         stage('Smoke Test prod') {
              agent {
                  docker {
                      image 'maven:3.5.0'
