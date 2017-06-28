@@ -30,13 +30,13 @@ pipeline {
              agent any
              steps {
                  sh 'docker build -t petclinic-tomcat .'
-                 sh 'docker rm -f petclinic-tomcat || true'
              }
          }
          stage('Run Temp Container') {
              agent any
              steps {
-                 sh 'docker run -p 18887:8080 -d --network=${LDOP_NETWORK_NAME} --name petclinic-tomcat petclinic-tomcat'
+                 sh 'docker rm -f petclinic-tomcat-temp || true'
+                 sh 'docker run -p 18887:8080 -d --network=${LDOP_NETWORK_NAME} --name petclinic-tomcat-temp petclinic-tomcat'
              }
          }
          stage('Smoke-Test') {
@@ -49,13 +49,70 @@ pipeline {
              steps {
                  sh "cd regression-suite"
                  sh "mvn clean -B test -DPETCLINIC_URL=http://petclinic-tomcat:8080/petclinic/"
-                 input 'Should be accessible at http://localhost:18887/petclinic/'
              }
          }
-         stage('Stop container') {
+         stage('Stop Temp Container') {
              agent any
              steps {
-                 sh 'docker stop petclinic-tomcat'
+                 sh 'docker rm -f petclinic-tomcat-temp || true'
+             }
+         }
+         stage('Deploy to Dev') {
+             agent any
+             steps {
+                 sh 'docker rm -f dev-petclinic || true'
+                 sh 'docker run -p 18888:8080 -d --network=${LDOP_NETWORK_NAME} --name dev-petclinic petclinic-tomcat'
+             }
+         }
+         stage('Smoke Test Dev') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--network=${LDOP_NETWORK_NAME}'
+                 }
+             }
+             steps {
+                 sh "cd regression-suite"
+                 sh "mvn clean -B test -DPETCLINIC_URL=http://dev-petclinic:8080/petclinic/"
+             }
+         }
+         stage('Deploy to QA') {
+             agent any
+             steps {
+                 sh 'docker rm -f qa-petclinic || true'
+                 sh 'docker run -p 18889:8080 -d --network=${LDOP_NETWORK_NAME} --name qa-petclinic petclinic-tomcat'
+             }
+         }
+         stage('Smoke Test QA') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--network=${LDOP_NETWORK_NAME}'
+                 }
+             }
+             steps {
+                 sh "cd regression-suite"
+                 sh "mvn clean -B test -DPETCLINIC_URL=http://qa-petclinic:8080/petclinic/"
+                 input 'Should be accessible at http://localhost:18889/petclinic/ Go to Prod?'
+             }
+         }
+         stage('Deploy to Prod') {
+             steps {
+                 sh 'docker rm -f prod-petclinic || true'
+                 sh 'docker run -p 18890:8080 -d --network=${LDOP_NETWORK_NAME} --name prod-petclinic petclinic-tomcat'
+             }
+         }
+         stage('Smoke Test Prod') {
+             agent {
+                 docker {
+                     image 'maven:3.5.0'
+                     args '--network=${LDOP_NETWORK_NAME}'
+                 }
+             }
+             steps {
+                 sh "cd regression-suite"
+                 sh "mvn clean -B test -DPETCLINIC_URL=http://prod-petclinic:8080/petclinic/"
+                 echo "Should be accessible at localhost:18890/petclinic"
              }
          }
     }
