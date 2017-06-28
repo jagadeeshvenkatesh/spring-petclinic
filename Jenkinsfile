@@ -74,6 +74,7 @@ pipeline {
              steps {
                  sh "cd regression-suite"
                  sh "mvn clean -B test -DPETCLINIC_URL=http://dev-petclinic:8080/petclinic/"
+                 echo "Should be accessible at http://localhost:18888/petclinic"
              }
          }
          stage('Deploy to qa') {
@@ -93,6 +94,7 @@ pipeline {
              steps {
                  sh "cd regression-suite"
                  sh "mvn clean -B test -DPETCLINIC_URL=http://qa-petclinic:8080/petclinic/"
+                 echo "Should be accessible at http://localhost:18889/petclinic"
                  input 'Deploy to Prod?'
              }
          }
@@ -113,7 +115,7 @@ pipeline {
              steps {
                  sh "cd regression-suite"
                  sh "mvn clean -B test -DPETCLINIC_URL=http://prod-petclinic:8080/petclinic/"
-                 echo "Should be accessible at localhost:18890/petclinic"
+                 echo "Should be accessible at http://localhost:18890/petclinic"
              }
          }
     }
