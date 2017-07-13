@@ -422,11 +422,11 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <url>http://artifactory:8081/nexus/content/repositories/snapshots</url>
+            <url>http://artifactory:8081/artifactory/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
-            <url>http://artifactory:8081/nexus/content/repositories/releases</url>
+            <url>http://artifactory:8081/artifactory/content/repositories/releases</url>
         </repository>
     </distributionManagement>
 
