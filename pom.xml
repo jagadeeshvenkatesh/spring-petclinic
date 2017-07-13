@@ -422,8 +422,7 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
-            <name>dcd5ea0e8888-snapshots</name>
-            <url>http://artifactory:8081/artifactory/snapshots</url>
+            <url>http://artifactory:8081/artifactory/example-repo-local</url>
         </snapshotRepository>
         <repository>
             <id>releases</id>
