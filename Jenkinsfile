@@ -25,7 +25,9 @@ pipeline {
                withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'PASSWORD',
                usernameVariable: 'USERNAME')]){
                  sh 'cf api https://api.run.pivotal.io'
-                 sh 'mkdir /.cf'
+                 sh 'mkdir ./.cf'
+                 sh 'cp /.cf ./.cf'
+                 sh "export CF_HOME=${PWD}/.cf"
                  sh "cf login -u ${env.USERNAME} -p ${env.PASSWORD}"
                  sh 'cf push'
            }
