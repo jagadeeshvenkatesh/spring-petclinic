@@ -22,8 +22,7 @@ pipeline {
                }
            }
            steps {
-               withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'PASSWORD',
-               usernameVariable: 'USERNAME')]){
+               withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]){
                  sh "cf api https://api.run.pivotal.io && cf login -u ${env.USERNAME} -p ${env.PASSWORD}"
                  sh 'cf push'
            }
