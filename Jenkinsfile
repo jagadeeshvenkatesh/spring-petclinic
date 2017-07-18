@@ -5,7 +5,8 @@ pipeline {
            agent {
                docker {
                    image 'maven:3.5.0'
-                   args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network demodeploymentpipeline_default'
+                   args '--network demodeploymentpipeline_default'
+               }
            }
            steps {
                configFileProvider(
