@@ -19,6 +19,7 @@ pipeline {
            agent {
                docker {
                    image 'liatrio/cf-cli'
+                   args  '-u 0:0'
                }
            }
            steps {
