@@ -15,7 +15,7 @@ pipeline {
                }
            }
        }
-       stage('Deploy to Pivotal') {
+       stage('Deploy to Pivotal Development') {
            agent {
                docker {
                    image 'liatrio/cf-cli'
@@ -26,8 +26,23 @@ pipeline {
                withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'pivotalPASSWORD', usernameVariable: 'pivotalUSERNAME')]){
                  sh "cf api https://api.run.pivotal.io && cf login -u ${env.pivotalUSERNAME} -p ${env.pivotalPASSWORD}"
                  sh 'cf push'
+                 input 'Deploy to Pivotal Prod?'
            }
        }
+       stage('Deploy to Pivotal Prod') {
+           agent {
+               docker {
+                   image 'liatrio/cf-cli'
+                   args  '-u 0:0'
+               }
+           }
+           steps {
+               withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'pivotalPASSWORD', usernameVariable: 'pivotalUSERNAME')]){
+                 sh "cf api https://api.run.pivotal.io && cf login -u ${env.pivotalUSERNAME} -p ${env.pivotalPASSWORD}"
+                 sh 'cf push -f prod_manifest.yml'
+           }
+       }
+
     }
   }
 }
