@@ -11,7 +11,7 @@ pipeline {
            steps {
                configFileProvider(
                        [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
-                   sh 'mvn -s $MAVEN_SETTINGS clean deploy -DskipTests=true -B'
+                   sh 'mvn -s $MAVEN_SETTINGS clean install -DskipTests=true -B'
                }
            }
        }
