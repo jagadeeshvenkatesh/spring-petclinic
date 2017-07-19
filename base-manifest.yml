@@ -3,7 +3,7 @@ memory: 512M
 random-route: false
 path: ./target/petclinic.war
 instances: 1
+domain: liatr.io
 
 applications:
- - name: spring-petclinic-dev
-   domain: spring-petclinic-pivotal-dev.liatr.io
+ - name: pivotal-dev
