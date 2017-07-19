@@ -40,7 +40,7 @@ pipeline {
            steps {
                withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'pivotalPASSWORD', usernameVariable: 'pivotalUSERNAME')]){
                  sh "cf api https://api.run.pivotal.io && cf login -u ${env.pivotalUSERNAME} -p ${env.pivotalPASSWORD}"
-                 sh 'cf push -f prod_manifest.yml'
+                 sh 'cf push -f ./prod_manifest.yml'
         }
       }
     }
