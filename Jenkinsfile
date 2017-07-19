@@ -26,6 +26,7 @@ pipeline {
                withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'pivotalPASSWORD', usernameVariable: 'pivotalUSERNAME')]){
                  sh "cf api https://api.run.pivotal.io && cf login -u ${env.pivotalUSERNAME} -p ${env.pivotalPASSWORD}"
                  sh 'cf push -f ./base-manifest.yml'
+                 echo "Should be accessible at http://pivotal-dev.liatr.io"
                  input 'Deploy to Pivotal Prod?'
            }
          }
@@ -41,6 +42,7 @@ pipeline {
                withCredentials([usernamePassword(credentialsId: 'pivotal', passwordVariable: 'pivotalPASSWORD', usernameVariable: 'pivotalUSERNAME')]){
                  sh "cf api https://api.run.pivotal.io && cf login -u ${env.pivotalUSERNAME} -p ${env.pivotalPASSWORD}"
                  sh 'cf push -f ./prod-manifest.yml'
+                 echo "Should be accessible at http://pivotal-prod.liatr.io"
         }
       }
     }
