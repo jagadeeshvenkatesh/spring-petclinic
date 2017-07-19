@@ -1,0 +1,6 @@
+---
+inherit: base-manifest.yml
+
+applications:
+ - name: spring-petclinic-prod
+   domain: spring-petclinic-pivotal.liatr.io
