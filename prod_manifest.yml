@@ -1,7 +1,0 @@
----
-applications:
- - name: liatrio-spring-petclinic-pivotal-prod
-   random-route: true
-   path: target/petclinic.war
-   memory: 512M
-   instances: 1
