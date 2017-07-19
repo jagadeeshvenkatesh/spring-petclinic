@@ -1,3 +1,4 @@
+#!groovy
 pipeline {
     agent none
     stages {
